@@ -12,16 +12,34 @@ document.getElementById("resumeForm")?.addEventListener('submit',function(event)
     const experienceElement = document.getElementById("experience") as HTMLInputElement;
     const skillsElement= document.getElementById("skills") as HTMLInputElement;
 
+    //** 
+    const usernameElement = document.getElementById(
+        "username"
+    )as HTMLInputElement;
+
     // check if all form element are present
 
-    if(profilePictureInput && nameElement && emailElement && phoneElement && educationElement && experienceElement && skillsElement){
+    if(profilePictureInput && 
+        nameElement && 
+        emailElement && phoneElement &&
+         educationElement && 
+         experienceElement && 
+         skillsElement&&
+
+         //**
+
+         usernameElement
+
+        ){
         const name = nameElement.value;
         const email = emailElement .value
          const phone = phoneElement .value
          const education = educationElement.value
          const experience =experienceElement .value
          const skills = skillsElement.value
-    
+    //** 
+    const username =usernameElement.value;
+    const uniquePath = `resumes/${username.replace(/\s+/g,'__')}_cv.html`
 // picture elements
 const profilePictureFile = profilePictureInput.files?.[0]
 const profilePictureURL = profilePictureFile ? URL.createObjectURL(profilePictureFile) : '';
@@ -30,7 +48,10 @@ const profilePictureURL = profilePictureFile ? URL.createObjectURL(profilePictur
     // Create Resume Output
     const resumeOutput = `
     <h2>Resume</h2>
-    ${profilePictureURL ?`<img src="${profilePictureURL} alt="Profile Picture" class="profilePicture">` :''}
+    ${profilePictureURL
+     ?`<img src="${profilePictureURL} alt="Profile Picture" class="profilePicture">` 
+     :''
+     }
     <p><strong>Name:</strong><span id="edit-name" class="editable">${name}</span> </p>
     <p><strong>Email:</strong><span id="edit-edit" class="editable">${email} </span> </p>
     <p><strong>Phone Number :</strong><span id="edit-phone" class="editable">${phone} </span> </p>
@@ -44,12 +65,20 @@ const profilePictureURL = profilePictureFile ? URL.createObjectURL(profilePictur
     <h3>Skills</h3>
     <p id="edit-skills" class="editable">${skills}</p>
 `;
+//**
+ const downloadlink = document.createElement('a')
+ downloadlink.href = 'data:text/html;charset=utf-8,' + encodeURIComponent(resumeOutput)
+ downloadlink.download = uniquePath;
+ downloadlink.textContent ='Download Your 2024 Resume';
 
 // Display the resume output
     const resumeOutputElement = document.getElementById('resumeOutput')
     if(resumeOutputElement){
-    resumeOutputElement.innerHTML = resumeOutput
+    resumeOutputElement.innerHTML = resumeOutput;
+    //** 
+    resumeOutputElement.appendChild(downloadlink)
 
+resumeOutputElement.style.display ="block";
    makeEditable();
      }
 
